@@ -1,384 +1,112 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalkulator pH Campuran Asam Kuat & Basa Kuat</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Font: Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        /* Glassmorphism & custom glow effects */
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(226, 232, 240, 0.8);
-        }
-        @media (prefers-color-scheme: dark) {
-            .glass-panel {
-                background: rgba(15, 23, 42, 0.85);
-                border: 1px solid rgba(51, 65, 85, 0.8);
-            }
-        }
-        /* Custom scrollbar for steps */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 9999px;
-        }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kalkulator pH Campuran Asam Kuat dan Basa Kuat</title>
+<style>
+:root{--bg:#f6f8fb;--card:#fff;--tx:#1b2430;--mut:#5d6b7c;--bd:#d9e0ea;--ac:#d9480f;--bs:#1c7ed6;--ok:#2b8a3e;--hl:#eef3fa;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12171e;--card:#1b222c;--tx:#e8edf3;--mut:#9aa8b8;--bd:#2d3744;--ac:#ff8a5c;--bs:#6cb2ff;--ok:#69db7c;--hl:#222c38;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#12171e;--card:#1b222c;--tx:#e8edf3;--mut:#9aa8b8;--bd:#2d3744;--ac:#ff8a5c;--bs:#6cb2ff;--ok:#69db7c;--hl:#222c38;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+.w{max-width:760px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:1.4rem;margin:0 0 4px}
+.sub{color:var(--mut);margin:0 0 18px}
+.g{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:600px){.g{grid-template-columns:1fr}}
+.c{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px 16px}
+.c h2{font-size:1rem;margin:0 0 10px}
+.a h2{color:var(--ac)}.b h2{color:var(--bs)}
+label{display:block;font-size:.85rem;color:var(--mut);margin:8px 0 3px}
+select,input{width:100%;padding:9px 10px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);font:inherit}
+button{margin-top:14px;width:100%;padding:12px;border:0;border-radius:10px;background:var(--tx);color:var(--bg);font:inherit;font-weight:600;cursor:pointer}
+#out{margin-top:18px}
+.s{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:12px 16px;margin-bottom:12px}
+.s h3{font-size:.95rem;margin:0 0 6px}
+.eq{background:var(--hl);border-radius:8px;padding:8px 12px;margin:6px 0;overflow-x:auto;white-space:nowrap}
+.res{text-align:center;padding:16px}
+.res .ph{font-size:2.2rem;font-weight:700}
+.tag{display:inline-block;padding:2px 12px;border-radius:99px;font-weight:600;font-size:.9rem;background:var(--hl)}
+.err{color:var(--ac);font-weight:600}
+.note{font-size:.82rem;color:var(--mut);margin-top:14px}
+</style>
 </head>
-<body class="bg-gradient-to-br from-slate-900 via-indigo-950 to-blue-950 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
-
-    <!-- Header / Navbar -->
-    <header class="w-full py-6 px-6 md:px-12 border-b border-slate-800/60 backdrop-blur-md sticky top-0 z-50 bg-slate-950/40">
-        <div class="max-w-6xl mx-auto flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-cyan-400 flex items-center justify-center shadow-lg shadow-indigo-500/30">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
-                    </svg>
-                </div>
-                <div>
-                    <h1 class="text-lg font-bold tracking-tight bg-gradient-to-r from-indigo-200 to-cyan-200 bg-clip-text text-transparent">ChemiCalc Pro</h1>
-                    <p class="text-xs text-slate-400">Modul Komputasi Stoikiometri Asam-Basa Kuat</p>
-                </div>
-            </div>
-            <div class="hidden sm:flex items-center space-x-2 text-xs font-medium px-3 py-1.5 rounded-full bg-slate-900/80 border border-slate-800 text-indigo-400">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span>Sistem Siap Digunakan</span>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="w-full max-w-6xl mx-auto px-4 sm:px-6 py-10 flex-grow grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        
-        <!-- Kolom Input (Kiri) -->
-        <section class="lg:col-span-5 glass-panel rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
-            <div class="absolute top-0 right-0 w-48 h-48 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
-            
-            <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
-                <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"></path></svg>
-                Parameter Reaktan
-            </h2>
-            <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">Masukkan konsentrasi molar dan volume larutan asam kuat dan basa kuat yang dicampurkan.</p>
-
-            <form id="calcForm" class="space-y-6">
-                
-                <!-- Blok Larutan Asam Kuat -->
-                <div class="p-4 rounded-2xl bg-slate-900/40 border border-slate-700/60 space-y-4">
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm font-semibold text-rose-400 flex items-center gap-1.5">
-                            <span class="w-3 h-3 rounded-full bg-rose-500 inline-block"></span>
-                            Larutan Asam Kuat
-                        </span>
-                        <select id="valensiAsam" class="text-xs bg-slate-800 text-slate-200 border border-slate-700 rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-rose-500">
-                            <option value="1">Valensi (a) = 1 (Contoh: HCl, HNO₃)</option>
-                            <option value="2">Valensi (a) = 2 (Contoh: H₂SO₄)</option>
-                        </select>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-xs font-medium text-slate-400 mb-1">Konsentrasi ($M_a$)</label>
-                            <div class="relative">
-                                <input type="number" step="any" min="0.000001" id="molaritasAsam" placeholder="0.1" required
-                                    class="w-full bg-slate-800/90 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-rose-500 transition">
-                                <span class="absolute right-3 top-2.5 text-xs text-slate-400 font-medium">M</span>
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-slate-400 mb-1">Volume ($V_a$)</label>
-                            <div class="relative">
-                                <input type="number" step="any" min="0.01" id="volumeAsam" placeholder="50" required
-                                    class="w-full bg-slate-800/90 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-rose-500 transition">
-                                <span class="absolute right-3 top-2.5 text-xs text-slate-400 font-medium">mL</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Blok Larutan Basa Kuat -->
-                <div class="p-4 rounded-2xl bg-slate-900/40 border border-slate-700/60 space-y-4">
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm font-semibold text-cyan-400 flex items-center gap-1.5">
-                            <span class="w-3 h-3 rounded-full bg-cyan-500 inline-block"></span>
-                            Larutan Basa Kuat
-                        </span>
-                        <select id="valensiBasa" class="text-xs bg-slate-800 text-slate-200 border border-slate-700 rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                            <option value="1">Valensi (b) = 1 (Contoh: NaOH, KOH)</option>
-                            <option value="2">Valensi (b) = 2 (Contoh: Ba(OH)₂, Ca(OH)₂)</option>
-                        </select>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-xs font-medium text-slate-400 mb-1">Konsentrasi ($M_b$)</label>
-                            <div class="relative">
-                                <input type="number" step="any" min="0.000001" id="molaritasBasa" placeholder="0.1" required
-                                    class="w-full bg-slate-800/90 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition">
-                                <span class="absolute right-3 top-2.5 text-xs text-slate-400 font-medium">M</span>
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-slate-400 mb-1">Volume ($V_b$)</label>
-                            <div class="relative">
-                                <input type="number" step="any" min="0.01" id="volumeBasa" placeholder="50" required
-                                    class="w-full bg-slate-800/90 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition">
-                                <span class="absolute right-3 top-2.5 text-xs text-slate-400 font-medium">mL</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Tombol Hitung -->
-                <button type="submit" class="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-600 hover:from-indigo-500 hover:to-cyan-500 text-white font-semibold shadow-lg shadow-indigo-600/30 active:scale-[0.99] transition duration-200 flex items-center justify-center gap-2 group">
-                    <svg class="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                    Hitung pH Campuran
-                </button>
-            </form>
-        </section>
-
-        <!-- Kolom Output & Analisis (Kanan) -->
-        <section class="lg:col-span-7 space-y-6">
-            
-            <!-- Card Hasil Utama -->
-            <div id="mainResultCard" class="glass-panel rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden flex flex-col justify-between transition-all duration-500">
-                <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-cyan-500/10 rounded-full blur-2xl pointer-events-none"></div>
-
-                <div>
-                    <div class="flex items-center justify-between mb-4">
-                        <span class="text-xs uppercase tracking-wider font-bold text-indigo-400 bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20">Hasil Komputasi</span>
-                        <span id="kondisiCampuranBadge" class="text-xs font-semibold px-3 py-1 rounded-full bg-slate-800 text-slate-300">-</span>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-6 items-center">
-                        <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 text-center">
-                            <span class="block text-xs text-slate-400 font-medium mb-1">Nilai pH Akhir</span>
-                            <div id="outputPh" class="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-cyan-300 tracking-tight">--</div>
-                            <span id="kategoriSifat" class="inline-block mt-2 text-xs font-semibold px-2.5 py-0.5 rounded-md bg-slate-800 text-slate-300">-</span>
-                        </div>
-                        <div class="space-y-3">
-                            <div class="flex justify-between items-center text-sm border-b border-slate-800/80 pb-2">
-                                <span class="text-slate-400">Total Volume ($V_{total}$)</span>
-                                <span id="outputVtotal" class="font-semibold text-slate-200">-- mL</span>
-                            </div>
-                            <div class="flex justify-between items-center text-sm border-b border-slate-800/80 pb-2">
-                                <span class="text-slate-400">Ion Berlebih</span>
-                                <span id="outputJenisIon" class="font-semibold text-slate-200">--</span>
-                            </div>
-                            <div class="flex justify-between items-center text-sm">
-                                <span class="text-slate-400">Konsentrasi Ion ($[H^+]/[OH^-]$)</span>
-                                <span id="outputKonsentrasiIon" class="font-semibold text-slate-200">-- M</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Visual Indikator pH Bar -->
-                <div class="mt-4 pt-4 border-t border-slate-800/80">
-                    <div class="flex justify-between text-xs text-slate-400 mb-1.5 font-medium">
-                        <span>Asam Kuat (pH 0)</span>
-                        <span>Netral (pH 7)</span>
-                        <span>Basa Kuat (pH 14)</span>
-                    </div>
-                    <div class="w-full h-3 rounded-full bg-gradient-to-r from-red-600 via-yellow-400 via-green-500 to-purple-800 relative p-0.5 shadow-inner">
-                        <div id="phPointer" class="absolute top-0 bottom-0 w-3 bg-white rounded-full shadow-lg border-2 border-slate-900 transition-all duration-700" style="left: 50%; transform: translateX(-50%);"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card Rincian Langkah Stoikiometri -->
-            <div class="glass-panel rounded-3xl p-6 sm:p-8 shadow-2xl">
-                <h3 class="text-base font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-                    <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                    Detail Stoikiometri & Analisis Reaksi
-                </h3>
-                
-                <div id="detailSteps" class="space-y-3 text-sm text-slate-300">
-                    <div class="p-4 rounded-xl bg-slate-900/40 border border-slate-800 text-slate-400 text-center italic">
-                        Belum ada data dihitung. Silakan masukkan nilai dan klik "Hitung pH Campuran".
-                    </div>
-                </div>
-            </div>
-
-        </section>
-
-    </main>
-
-    <!-- Footer -->
-    <footer class="w-full py-6 px-6 text-center text-xs text-slate-500 border-t border-slate-800/60 bg-slate-950/40 mt-12">
-        <p>Aplikasi Komputasi Kimia Anorganik &bull; Dibuat khusus untuk Analisis pH Campuran Asam & Basa Kuat.</p>
-    </footer>
-
-    <!-- Custom Modal / Notifikasi pengganti alert -->
-    <div id="customModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm hidden">
-        <div class="glass-panel max-w-sm w-full mx-4 p-6 rounded-3xl shadow-2xl border border-slate-700 text-center space-y-4">
-            <div id="modalIcon" class="w-12 h-12 rounded-2xl bg-rose-500/20 text-rose-400 flex items-center justify-center mx-auto text-xl font-bold">!</div>
-            <h4 id="modalTitle" class="text-lg font-bold text-slate-100">Perhatian</h4>
-            <p id="modalMessage" class="text-sm text-slate-300">Pesan keterangan di sini.</p>
-            <button onclick="closeModal()" class="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-medium transition shadow-lg shadow-indigo-600/30">Mengerti</button>
-        </div>
-    </div>
-
-    <!-- JavaScript Logika Kimia Komputasi -->
-    <script>
-        function showModal(title, message) {
-            document.getElementById('modalTitle').innerText = title;
-            document.getElementById('modalMessage').innerText = message;
-            document.getElementById('customModal').classList.remove('hidden');
-        }
-
-        function closeModal() {
-            document.getElementById('customModal').classList.add('hidden');
-        }
-
-        document.getElementById('calcForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            // Ambil input nilai
-            const valensiA = parseFloat(document.getElementById('valensiAsam').value);
-            const Ma = parseFloat(document.getElementById('molaritasAsam').value);
-            const Va = parseFloat(document.getElementById('volumeAsam').value);
-
-            const valensiB = parseFloat(document.getElementById('valensiBasa').value);
-            const Mb = parseFloat(document.getElementById('molaritasBasa').value);
-            const Vb = parseFloat(document.getElementById('volumeBasa').value);
-
-            // Validasi input
-            if (isNaN(Ma) || isNaN(Va) || isNaN(Mb) || isNaN(Vb) || Ma <= 0 || Va <= 0 || Mb <= 0 || Vb <= 0) {
-                showModal("Kesalahan Input", "Semua nilai Konsentrasi dan Volume harus berupa angka positif yang valid.");
-                return;
-            }
-
-            // Hitung mol (dalam milimol = Molar x mL)
-            const mmolA = Ma * Va;
-            const mmolB = Mb * Vb;
-
-            // Hitung mol ion H+ dan OH-
-            const molH = mmolA * valensiA; // mmol H+
-            const molOH = mmolB * valensiB; // mmol OH-
-
-            const Vtotal = Va + Vb; // dalam mL
-
-            let ph = 0;
-            let kondisiText = "";
-            let badgeColor = "";
-            let sifatText = "";
-            let jenisIon = "";
-            let konsentrasiIonVal = 0;
-            let stepsHtml = "";
-
-            stepsHtml += `<div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800"><span class="font-semibold text-indigo-300">1. Perhitungan Mol Mula-mula:</span><br>
-                &bull; Mol Asam ($n_a$) = ${Ma} M &times; ${Va} mL = ${mmolA.toFixed(4)} mmol<br>
-                &bull; Mol ion $H^+$ ($n_{H^+}$) = ${mmolA.toFixed(4)} &times; ${valensiA} = <strong class="text-rose-400">${molH.toFixed(4)} mmol</strong><br>
-                &bull; Mol Basa ($n_b$) = ${Mb} M &times; ${Vb} mL = ${mmolB.toFixed(4)} mmol<br>
-                &bull; Mol ion $OH^-$ ($n_{OH^-}$) = ${mmolB.toFixed(4)} &times; ${valensiB} = <strong class="text-cyan-400">${molOH.toFixed(4)} mmol</strong>
-            </div>`;
-
-            if (Math.abs(molH - molOH) < 1e-9) {
-                // Netral
-                kondisiText = "Netralisasi Sempurna";
-                badgeColor = "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
-                sifatText = "Netral (Garam)";
-                ph = 7.0;
-                jenisIon = "Tidak ada ($H^+ = OH^- = 10^{-7} M$)";
-                konsentrasiIonVal = 1e-7;
-
-                stepsHtml += `<div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800"><span class="font-semibold text-emerald-300">2. Analisis Reaksi:</span><br>
-                    Jumlah mol $H^+$ sama persis dengan $OH^-$ ($n_{H^+} = n_{OH^-}$). Reaksi berjalan sempurna menghasilkan garam dan air.<br>
-                    &bull; Larutan bersifat <strong>Netral</strong> dengan $\\text{pH} = 7.00$.
-                </div>`;
-
-            } else if (molH > molOH) {
-                // Asam Berlebih
-                const sisaH = molH - molOH; // mmol
-                konsentrasiIonVal = sisaH / Vtotal; // M
-                ph = -Math.log10(konsentrasiIonVal);
-                if (ph < 0) ph = 0;
-                if (ph > 14) ph = 14;
-
-                kondisiText = "Asam Kuat Bersisa";
-                badgeColor = "bg-rose-500/20 text-rose-400 border border-rose-500/30";
-                sifatText = "Asam";
-                jenisIon = "Ion Hidrogen ($H^+$)";
-
-                stepsHtml += `<div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800"><span class="font-semibold text-rose-300">2. Analisis Reaksi (Asam Berlebih):</span><br>
-                    Mol $H^+$ (${molH.toFixed(4)} mmol) > Mol $OH^-$ (${molOH.toFixed(4)} mmol). Asam kuat bersisa.<br>
-                    &bull; Sisa mol $H^+$ = ${molH.toFixed(4)} - ${molOH.toFixed(4)} = <strong class="text-rose-400">${sisaH.toFixed(4)} mmol</strong><br>
-                    &bull; Volume Total ($V_{total}$) = ${Va} + ${Vb} = ${Vtotal.toFixed(2)} mL<br>
-                    &bull; $[H^+] = \\frac{\\text{Sisa Mol } H^+}{V_{total}} = \\frac{${sisaH.toFixed(4)}}{${Vtotal.toFixed(2)}} = <strong>${konsentrasiIonVal.toExponential(4)} M</strong>
-                </div>`;
-
-                stepsHtml += `<div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800"><span class="font-semibold text-indigo-300">3. Perhitungan pH:</span><br>
-                    $\\text{pH} = -\\log[H^+] = -\\log(${konsentrasiIonVal.toExponential(4)}) = <strong class="text-indigo-300">${ph.toFixed(2)}</strong>
-                </div>`;
-
-            } else {
-                // Basa Berlebih
-                const sisaOH = molOH - molH; // mmol
-                const konsentrasiOH = sisaOH / Vtotal; // M
-                const pOH = -Math.log10(konsentrasiOH);
-                ph = 14 - pOH;
-                if (ph < 0) ph = 0;
-                if (ph > 14) ph = 14;
-
-                kondisiText = "Basa Kuat Bersisa";
-                badgeColor = "bg-cyan-500/20 text-cyan-400 border border-cyan-500/30";
-                sifatText = "Basa";
-                jenisIon = "Ion Hidroksida ($OH^-$)";
-
-                stepsHtml += `<div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800"><span class="font-semibold text-cyan-300">2. Analisis Reaksi (Basa Berlebih):</span><br>
-                    Mol $OH^-$ (${molOH.toFixed(4)} mmol) > Mol $H^+$ (${molH.toFixed(4)} mmol). Basa kuat bersisa.<br>
-                    &bull; Sisa mol $OH^-$ = ${molOH.toFixed(4)} - ${molH.toFixed(4)} = <strong class="text-cyan-400">${sisaOH.toFixed(4)} mmol</strong><br>
-                    &bull; Volume Total ($V_{total}$) = ${Va} + ${Vb} = ${Vtotal.toFixed(2)} mL<br>
-                    &bull; $[OH^-] = \\frac{\\text{Sisa Mol } OH^-}{V_{total}} = \\frac{${sisaOH.toFixed(4)}}{${Vtotal.toFixed(2)}} = <strong>${konsentrasiOH.toExponential(4)} M</strong>
-                </div>`;
-
-                stepsHtml += `<div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800"><span class="font-semibold text-indigo-300">3. Perhitungan pOH & pH:</span><br>
-                    $\\text{pOH} = -\\log[OH^-] = -\\log(${konsentrasiOH.toExponential(4)}) = ${pOH.toFixed(2)}<br>
-                    $\\text{pH} = 14 - \\text{pOH} = 14 - ${pOH.toFixed(2)} = <strong class="text-indigo-300">${ph.toFixed(2)}</strong>
-                </div>`;
-            }
-
-            // Render ke UI
-            document.getElementById('outputPh').innerText = ph.toFixed(2);
-            document.getElementById('outputVtotal').innerText = Vtotal.toFixed(2) + " mL";
-            document.getElementById('outputJenisIon').innerText = jenisIon;
-            document.getElementById('outputKonsentrasiIon').innerText = konsentrasiIonVal.toExponential(3) + " M";
-            
-            const badgeEl = document.getElementById('kondisiCampuranBadge');
-            badgeEl.className = `text-xs font-semibold px-3 py-1 rounded-full ${badgeColor}`;
-            badgeEl.innerText = kondisiText;
-
-            const kategoriEl = document.getElementById('kategoriSifat');
-            kategoriEl.innerText = "Sifat: " + sifatText;
-            if (sifatText === "Asam") {
-                kategoriEl.className = "inline-block mt-2 text-xs font-semibold px-2.5 py-0.5 rounded-md bg-rose-500/20 text-rose-300 border border-rose-500/30";
-            } else if (sifatText === "Basa") {
-                kategoriEl.className = "inline-block mt-2 text-xs font-semibold px-2.5 py-0.5 rounded-md bg-cyan-500/20 text-cyan-300 border border-cyan-500/30";
-            } else {
-                kategoriEl.className = "inline-block mt-2 text-xs font-semibold px-2.5 py-0.5 rounded-md bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
-            }
-
-            // Update posisi pointer pH Bar (skala 0 - 14)
-            const percentage = (ph / 14) * 100;
-            document.getElementById('phPointer').style.left = `${Math.max(2, Math.min(98, percentage))}%`;
-
-            // Update step details
-            document.getElementById('detailSteps').innerHTML = stepsHtml;
-        });
-    </script>
+<body>
+<div class="w">
+<h1>Kalkulator pH Campuran Asam Kuat + Basa Kuat</h1>
+<p class="sub">Valensi 1, 2, dan 3, lengkap dengan persamaan reaksi dan langkah hitung (suhu 25 °C, pKw = 14).</p>
+<div class="g">
+<div class="c a"><h2>Asam kuat (H<sub>n</sub>A)</h2>
+<label>Valensi asam (n)</label>
+<select id="n"><option value="1">1 (contoh: HCl, HNO₃)</option><option value="2">2 (contoh: H₂SO₄)</option><option value="3">3 (hipotetis, H₃A)</option></select>
+<label>Molaritas (M)</label><input id="ma" type="number" step="any" min="0" value="0.1">
+<label>Volume (mL)</label><input id="va" type="number" step="any" min="0" value="100"></div>
+<div class="c b"><h2>Basa kuat (M(OH)<sub>m</sub>)</h2>
+<label>Valensi basa (m)</label>
+<select id="m"><option value="1">1 (contoh: NaOH, KOH)</option><option value="2">2 (contoh: Ba(OH)₂, Ca(OH)₂)</option><option value="3">3 (hipotetis, M(OH)₃)</option></select>
+<label>Molaritas (M)</label><input id="mb" type="number" step="any" min="0" value="0.1">
+<label>Volume (mL)</label><input id="vb" type="number" step="any" min="0" value="50"></div>
+</div>
+<button id="go">Hitung pH</button>
+<div id="out"></div>
+<p class="note">Asam atau basa bervalensi 3 yang benar-benar kuat jarang ada; di sini dipakai sebagai model hitung (anggap terionisasi sempurna). Hasil dibulatkan 2 desimal.</p>
+</div>
+<script>
+const sb=k=>k==1?'':'<sub>'+k+'</sub>';
+const co=k=>k==1?'':k+' ';
+const ch=(k,s)=>'<sup>'+(k==1?'':k)+s+'</sup>';
+const gcd=(a,b)=>b?gcd(b,a%b):a;
+const f=(x,d=4)=>{if(x===0)return '0';const a=Math.abs(x);return (a<1e-3||a>=1e5)?x.toExponential(2).replace('e',' × 10^').replace('^+','^'):+x.toFixed(d)+''};
+const pw=s=>s.replace(/10\^(-?\d+)/,'10<sup>$1</sup>');
+const fm=x=>pw(f(x));
+function run(){
+const n=+document.getElementById('n').value,m=+document.getElementById('m').value;
+const ma=parseFloat(document.getElementById('ma').value),va=parseFloat(document.getElementById('va').value);
+const mb=parseFloat(document.getElementById('mb').value),vb=parseFloat(document.getElementById('vb').value);
+const out=document.getElementById('out');
+if([ma,va,mb,vb].some(x=>isNaN(x)||x<0)||va+vb<=0){out.innerHTML='<p class="err">Isi semua kolom dengan angka yang valid (tidak negatif).</p>';return}
+const g=gcd(n,m),n1=n/g,m1=m/g,w=n*m/g;
+const A='H'+sb(n)+'A',B=m==1?'MOH':'M(OH)'+sb(m),S='M'+sb(n1)+'A'+sb(m1);
+const eqIon1=A+' → '+co(n)+'H<sup>+</sup> + A'+ch(n,'−');
+const eqIon2=B+' → M'+ch(m,'+')+' + '+co(m)+'OH<sup>−</sup>';
+const eqRx=(m1==1?'':m1+' ')+A+' + '+(n1==1?'':n1+' ')+B+' → '+S+' + '+w+' H<sub>2</sub>O';
+const nH=ma*va*n,nOH=mb*vb*m,vt=va+vb;
+let h='';
+h+='<div class="s"><h3>1. Persamaan reaksi</h3><div class="eq">Ionisasi asam: '+eqIon1+'</div><div class="eq">Ionisasi basa: '+eqIon2+'</div><div class="eq">Reaksi netralisasi: '+eqRx+'</div><div class="eq">Reaksi ion bersih: H<sup>+</sup> + OH<sup>−</sup> → H<sub>2</sub>O</div></div>';
+h+='<div class="s"><h3>2. Hitung mmol H<sup>+</sup> dan OH<sup>−</sup></h3>'
++'<div class="eq">mmol H<sup>+</sup> = M × V × n = '+f(ma)+' × '+f(va)+' × '+n+' = <b>'+fm(nH)+' mmol</b></div>'
++'<div class="eq">mmol OH<sup>−</sup> = M × V × m = '+f(mb)+' × '+f(vb)+' × '+m+' = <b>'+fm(nOH)+' mmol</b></div></div>';
+const eps=1e-12*Math.max(nH,nOH,1);
+const d=nH-nOH;let ph,type,tag;
+h+='<div class="s"><h3>3. Bandingkan (H<sup>+</sup> + OH<sup>−</sup> → H<sub>2</sub>O)</h3>';
+h+='<div class="eq">H<sup>+</sup> &nbsp;&nbsp;&nbsp;: '+fm(nH)+' mmol<br>OH<sup>−</sup> : '+fm(nOH)+' mmol</div>';
+h+='<div class="eq">Bereaksi: '+fm(Math.min(nH,nOH))+' mmol → H<sub>2</sub>O</div>';
+if(Math.abs(d)<=eps){
+ph=7;tag='Netral (tepat habis bereaksi)';
+h+='<p>Jumlah H<sup>+</sup> sama dengan OH<sup>−</sup>, keduanya habis. Larutan hanya berisi garam '+S+' dari asam kuat dan basa kuat, sehingga tidak terhidrolisis.</p><div class="eq">pH = 7</div></div>';
+}else if(d>0){
+const c=d/vt;ph=-Math.log10(c);tag='Bersifat asam (sisa H<sup>+</sup>)';
+h+='<p>H<sup>+</sup> berlebih, sisa asam menentukan pH.</p>'
++'<div class="eq">Sisa H<sup>+</sup> = '+fm(nH)+' − '+fm(nOH)+' = '+fm(d)+' mmol</div>'
++'<div class="eq">V total = '+f(va)+' + '+f(vb)+' = '+f(vt)+' mL</div>'
++'<div class="eq">[H<sup>+</sup>] = '+fm(d)+' / '+f(vt)+' = '+fm(c)+' M</div>'
++'<div class="eq">pH = −log [H<sup>+</sup>] = −log ('+fm(c)+') = <b>'+ph.toFixed(2)+'</b></div></div>';
+}else{
+const c=-d/vt;const poh=-Math.log10(c);ph=14-poh;tag='Bersifat basa (sisa OH<sup>−</sup>)';
+h+='<p>OH<sup>−</sup> berlebih, sisa basa menentukan pH.</p>'
++'<div class="eq">Sisa OH<sup>−</sup> = '+fm(nOH)+' − '+fm(nH)+' = '+fm(-d)+' mmol</div>'
++'<div class="eq">V total = '+f(va)+' + '+f(vb)+' = '+f(vt)+' mL</div>'
++'<div class="eq">[OH<sup>−</sup>] = '+fm(-d)+' / '+f(vt)+' = '+fm(c)+' M</div>'
++'<div class="eq">pOH = −log ('+fm(c)+') = '+poh.toFixed(2)+'</div>'
++'<div class="eq">pH = 14 − pOH = 14 − '+poh.toFixed(2)+' = <b>'+ph.toFixed(2)+'</b></div></div>';
+}
+h+='<div class="s res"><div>pH campuran</div><div class="ph">'+ph.toFixed(2)+'</div><span class="tag">'+tag+'</span></div>';
+out.innerHTML=h;
+}
+document.getElementById('go').addEventListener('click',run);
+run();
+</script>
 </body>
 </html>
